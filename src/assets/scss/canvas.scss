@@ -1,0 +1,122 @@
+@import "./variables.scss";
+
+.cards {
+    // padding: 20px;
+    // margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .card {
+        width: 350px;
+        height: 210px;
+        background: #fff;
+        position: relative;
+        h1 {
+            font-size: 18px;
+            color:#529efe;
+            font-weight: bold;
+            @include position($left:30px, $top:20px);
+        }
+        .position {
+            @include position($left:30px, $top:45px);
+        }
+        h2 {
+            font-size: 14px;
+            color: #333;
+            font-weight:bold;
+            @include position($left:30px, $top:90px);
+        }
+        .tel {
+            @include position($left:30px, $top:120px);
+        }
+        .email {
+            @include position($left:30px, $top:145px);
+        }
+        .local {
+            @include position($left:30px, $top:170px);
+        }
+        .logo {
+            i {
+                @include position($right:30px, $top:40px);
+                font-size: 22px;
+                color: #ddd;
+            }
+        }
+        p {
+            font-size: 12px;
+        }
+        i, span {
+            vertical-align: middle;
+        }
+        .iconfont {
+            color:#529efe;
+            font-size: 20px;
+        }
+    }
+    .card-yellow {
+        background: #F6C15B;
+        .logo i,
+        i,
+        p {
+            color: #a76e00 !important;
+        }
+        h1{
+            color: #fff !important;
+        }
+        h2 {
+            color:#af7008!important;
+        }
+    }
+    .card-purple {
+        background: #7650e9;
+        .logo i{
+            color: #3b387d !important;
+            left: 30px;
+            right: auto;
+        }
+        i,
+        p {
+            color: #bba4ff !important;
+        }
+        h1{
+            color: #fff !important;
+            right: 30px;
+            left: auto;
+            font-weight: bold;
+        }
+        .position {
+            right: 30px;
+            left: auto;
+        }
+        h2 {
+            color: #3b387d !important;
+        }
+    }
+}
+#cardCanvas {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+}
+.canvasBtnTeams {
+    padding: 20px;
+    text-align: center;
+}
+.cardsForm {
+    padding: 20px;
+    .from-item {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        width: 80%;
+        span {
+            width: 150px;
+            text-align: right;
+            margin-right: 20px;
+        }
+        input {
+            flex: 1;
+            padding: 5px 15px;
+        }
+    }
+}
