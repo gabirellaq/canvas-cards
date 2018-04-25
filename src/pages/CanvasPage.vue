@@ -83,26 +83,6 @@
                     filename = this.card.Name +"_"+ state +"_"+ (new Date()).getTime() +'.'+ type,
                     imgData = null;
                 
-                this.drawPic(state);
-                await this.sleep(400);
-                imgData = c.toDataURL("image"+type);
-                //this.saveFile(this.drawPic(state, type), filename);
-
-                //save server
-                await this.savePicToServe(imgData, filename);
-            },
-
-            saveFile (data, filename){
-                let save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-                    save_link.href = data;
-                    save_link.download = filename;
-            
-                let event = document.createEvent('MouseEvents');
-                    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-                    save_link.dispatchEvent(event);
-            },
-
-            drawPic (state)  {
                 let options = {};
                     
                 if(state === "default") {
@@ -116,8 +96,7 @@
                         email: { x: 30, y: 145, w: 20, h: 20, textx: 53, texty: 160},
                         local: { x: 30, y: 170, w: 20, h: 20, textx: 53, texty: 185},
                         logo: { x: 210, y: 39, w: 114, h: 24},
-                    }
-                    this.canvasCtx(state, options);                                                        
+                    }                                                       
                 }
                 if(state === "yellow") {
                     options = {
@@ -130,8 +109,7 @@
                         email: { x: 30, y: 145, w: 20, h: 20, textx: 53, texty: 160},
                         local: { x: 30, y: 170, w: 20, h: 20, textx: 53, texty: 185},
                         logo: { x: 210, y: 39, w: 114, h: 24},
-                    }
-                    this.canvasCtx(state, options);                                      
+                    }                                    
                 }
                 if(state === "purple") {
                     options = {
@@ -145,53 +123,76 @@
                         local: { x: 30, y: 170, w: 20, h: 20, textx: 53, texty: 185},
                         logo: { x: 30, y: 39, w: 114, h: 24},
                     }
-                    this.canvasCtx(state, options);                                      
+                                                         
                 }
+
+                await this.canvasCtx(state, options).then(data => {
+                    imgData = data;
+                })
+
+
+                //save server
+                this.savePicToServe(imgData, filename);
+            },
+
+            saveFile (data, filename){
+                let save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                    save_link.href = data;
+                    save_link.download = filename;
+            
+                let event = document.createEvent('MouseEvents');
+                    event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    save_link.dispatchEvent(event);
+            },
+
+            drawPic (state)  {
+                
             },
             canvasCtx(state, options) {
-                let c = document.getElementById('cardCanvas'),
-                    ctx = c.getContext('2d'),
-                    images = [],
-                    imgs = ['telephone','email','local','logo'];
+                return new Promise((resolve, reject) => {
+                    let c = document.getElementById('cardCanvas'),
+                        ctx = c.getContext('2d'),
+                        images = [],
+                        imgs = ['telephone','email','local','logo'],
+                        flag = 0;
 
-                ctx.fillStyle = options.bgFillStyle; 
-                ctx.fillRect(0, 0, 350, 210);   
+                    ctx.fillStyle = options.bgFillStyle; 
+                    ctx.fillRect(0, 0, 350, 210);                                 
 
-                for (let i =0; i< 4;i++){
-                    images[i] = new Image();
-                    images[i].src = "./static/images/"+state+"/"+imgs[i]+".png";
-                    if(images[i].complete) {
-                        ctx.drawImage(images[0], options.tel.x, options.tel.y, options.tel.w, options.tel.h);
-                        ctx.drawImage(images[1], options.email.x, options.email.y, options.email.w, options.email.h);
-                        ctx.drawImage(images[2], options.local.x, options.local.y, options.local.w, options.local.h);
-                        ctx.drawImage(images[3], options.logo.x, options.logo.y, options.logo.w, options.logo.h);
-                    }
-                    images[i].onload = function (e) {
-                        ctx.drawImage(images[0], options.tel.x, options.tel.y, options.tel.w, options.tel.h);
-                        ctx.drawImage(images[1], options.email.x, options.email.y, options.email.w, options.email.h);
-                        ctx.drawImage(images[2], options.local.x, options.local.y, options.local.w, options.local.h);
-                        ctx.drawImage(images[3], options.logo.x, options.logo.y, options.logo.w, options.logo.h);
-                    }                    
-                }                                
+                    ctx.font = options.name.font;
+                    ctx.fillStyle = options.name.color;
+                    ctx.textAlign = options.name.align;
+                    ctx.fillText(this.card.Name, options.name.x, options.name.y, options.name.maxwidth);
 
-                ctx.font = options.name.font;
-                ctx.fillStyle = options.name.color;
-                ctx.textAlign = options.name.align;
-                ctx.fillText(this.card.Name, options.name.x, options.name.y, options.name.maxwidth);
+                    ctx.font = options.company.font;
+                    ctx.fillStyle = options.company.color;
+                    ctx.textAlign = options.text.align;
+                    ctx.fillText(this.card.Company, options.company.x, options.company.y);
 
-                ctx.font = options.company.font;
-                ctx.fillStyle = options.company.color;
-                ctx.textAlign = options.text.align;
-                ctx.fillText(this.card.Company, options.company.x, options.company.y);
+                    ctx.font = options.position.font;
+                    ctx.fillStyle = options.position.color;
+                    ctx.textAlign = options.position.align;
+                    ctx.fillText(this.card.Position, options.position.x, options.position.y);
+                    ctx.textAlign = options.text.align;
+                    ctx.fillText(this.card.Tel, options.tel.textx, options.tel.texty);
+                    ctx.fillText(this.card.Email, options.email.textx, options.email.texty);
+                    ctx.fillText(this.card.Local, options.local.textx, options.local.texty);
 
-                ctx.font = options.position.font;
-                ctx.fillStyle = options.position.color;
-                ctx.textAlign = options.position.align;
-                ctx.fillText(this.card.Position, options.position.x, options.position.y);
-                ctx.textAlign = options.text.align;
-                ctx.fillText(this.card.Tel, options.tel.textx, options.tel.texty);
-                ctx.fillText(this.card.Email, options.email.textx, options.email.texty);
-                ctx.fillText(this.card.Local, options.local.textx, options.local.texty);
+                    for (let i =0; i< imgs.length; i++){
+                        images[i] = new Image();
+                        images[i].src = "./static/images/"+state+"/"+imgs[i]+".png";
+                        images[i].onload = function (e) {
+                            ctx.drawImage(images[0], options.tel.x, options.tel.y, options.tel.w, options.tel.h);
+                            ctx.drawImage(images[1], options.email.x, options.email.y, options.email.w, options.email.h);
+                            ctx.drawImage(images[2], options.local.x, options.local.y, options.local.w, options.local.h);
+                            ctx.drawImage(images[3], options.logo.x, options.logo.y, options.logo.w, options.logo.h);
+                            flag = flag + 1;
+                            if(flag === imgs.length) {
+                                resolve(c.toDataURL("image/png"))
+                            }                    
+                        }
+                    }  
+                })
             },
             savePicToServe (url, filename) {
                 requestPromise("GET", "upload", "/upload", 
