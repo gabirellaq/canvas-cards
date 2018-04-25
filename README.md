@@ -8,7 +8,7 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8345
+# serve with hot reload at localhost:8346
 npm start
 
 # build for production with minification
@@ -57,7 +57,7 @@ canvas.toDataURL("image/png");
 ## 常见问题
 * [HTML5 Canvas toDataURL returns blank
 ](https://stackoverflow.com/questions/31193418/html5-canvas-todataurl-returns-blank)
-* canvas 转 base64 时必须等待图片加载完成之后才可以
+* [canvas 转 base64 时必须等待图片加载完成之后才可以](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) (Test.Vue有示例)
 
 ## CAPTURE
 ![img](./screenshot/1.PNG)
