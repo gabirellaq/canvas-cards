@@ -59,6 +59,9 @@ canvas.toDataURL("image/png");
 ](https://stackoverflow.com/questions/31193418/html5-canvas-todataurl-returns-blank)
 * [canvas 转 base64 时必须等待图片加载完成之后才可以](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image) (Test.Vue有示例)
 
+## 扩展
+* [html2canvas](https://github.com/niklasvh/html2canvas)
+
 ## CAPTURE
 ![img](./screenshot/1.PNG)
 ![img](./screenshot/2.PNG)

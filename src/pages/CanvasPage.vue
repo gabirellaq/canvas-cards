@@ -22,7 +22,7 @@
             </el-tab-pane>
         </el-tabs>
         <div class="canvasBtnTeams">
-            <el-button type="primary" @click="SaveCard(types)">保存名片</el-button>
+            <el-button type="primary" :loading="saveBtn.loading" @click="SaveCard(types)">{{saveBtn.text}}</el-button>
             <router-link to="/allcards" class="el-button el-button--primary">查看已有名片</router-link>
         </div>
         <div class="cardsForm">
@@ -62,6 +62,10 @@
             return {
                 tabPosition: 'bottom',
                 types: 'default', //名片模板类型
+                saveBtn: {
+                    text: '保存名片',
+                    loading: false,
+                },
                 card: {
                     Name: 'Your Name',
                     Position: 'Your Position',
@@ -78,6 +82,10 @@
                 this.types = tab.$attrs.types;
             },
             async SaveCard (state) {
+                this.saveBtn = {
+                    text: '保存中……',
+                    loading: true
+                }
                 let c = document.getElementById('cardCanvas'),
                     type = "png",
                     filename = this.card.Name +"_"+ state +"_"+ (new Date()).getTime() +'.'+ type,
@@ -132,7 +140,12 @@
 
 
                 //save server
-                this.savePicToServe(imgData, filename);
+                await this.savePicToServe(imgData, filename);
+
+                this.saveBtn = {
+                    text: '保存名片',
+                    loading: false
+                }
             },
 
             saveFile (data, filename){
